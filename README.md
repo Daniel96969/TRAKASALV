@@ -125,3 +125,6 @@ python biblioteca.py
 ↩️ Ingresa 4 → Devuelve un libro.
 
 📋 Ingresa 5 o 6 → Lista los registros.
+
+<img width="971" height="902" alt="image" src="https://github.com/user-attachments/assets/ec3cdc1d-8648-484d-a07c-6679efaf77db" />
+
