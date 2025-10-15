@@ -1,40 +1,36 @@
-Sistema de Biblioteca
+# 📚 Sistema de Biblioteca — Proyecto en Python y MySQL
 
-README para el archivo biblioteca.py.
+Este proyecto implementa un sistema de gestión de biblioteca simple en consola usando Python y MySQL. Permite registrar libros, usuarios, préstamos y devoluciones de manera eficiente.
 
-Descripción
+🧩 Características principales
 
-Aplicación de consola en Python para gestionar una biblioteca mínima que permite:
+✅ Registrar libros con título, autor y año.
 
-Registrar libros.
+✅ Registrar usuarios (por ejemplo, estudiantes o profesores).
 
-Registrar usuarios.
+✅ Registrar préstamos y devoluciones.
 
-Registrar préstamos y devoluciones.
+✅ Listar todos los libros o préstamos activos.
 
-Listar libros y préstamos.
+✅ Conexión a base de datos MySQL para almacenamiento persistente.
 
-El programa usa MySQL como backend para persistencia de datos.
+⚙️ Requisitos
 
-Requisitos
+Python 3.8 o superior
 
-Python 3.8+ (recomendado)
+MySQL instalado y corriendo localmente o en un servidor.
 
-MySQL (servidor en local o remoto)
-
-Paquete Python: mysql-connector-python
-
-Instalación del paquete necesario:
+Librería Python:
 
 pip install mysql-connector-python
-Configuración de la base de datos
+🗃️ Configuración de la Base de Datos
 
-Crear la base de datos biblioteca en MySQL:
+Crea la base de datos:
 
 CREATE DATABASE biblioteca;
 USE biblioteca;
 
-Crear las tablas necesarias (ejemplo):
+Crea las tablas necesarias:
 
 CREATE TABLE libros (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -48,7 +44,7 @@ CREATE TABLE libros (
 CREATE TABLE usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(255) NOT NULL,
-  tipo VARCHAR(50) -- por ejemplo: Estudiante, Profesor
+  tipo VARCHAR(50)
 );
 
 
@@ -61,96 +57,71 @@ CREATE TABLE prestamos (
   FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
   FOREIGN KEY (id_libro) REFERENCES libros(id) ON DELETE CASCADE
 );
+🔐 Configuración de conexión
 
-Nota: ajusta los tipos y restricciones según tus necesidades.
-
-Configurar credenciales
-
-En biblioteca.py por defecto la conexión está configurada así:
+Dentro del archivo biblioteca.py, asegúrate de editar los datos de conexión:
 
 self.conexion = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="Toor",  # Cambia por la contraseña de tu MySQL
+    password="Toor",  # ⚠️ Cambia esta contraseña
     database="biblioteca"
 )
 
-Cambia host, user, password y database para que coincidan con tu entorno.
+💡 Recomendado: usa variables de entorno o un archivo .env para mayor seguridad.
 
-Sugerencia: para mayor seguridad, carga credenciales desde variables de entorno o un archivo de configuración en lugar de hardcodearlas.
+🚀 Ejecución del programa
 
-Uso
-
-Ejecuta el script desde la terminal:
+Ejecuta el archivo principal desde la terminal:
 
 python biblioteca.py
 
-Verás un menú interactivo con opciones para registrar libros, usuarios, préstamos, devoluciones y listar datos.
+Se mostrará un menú interactivo con opciones como:
 
-Flujo básico
+1️⃣ Registrar libro
+2️⃣ Registrar usuario
+3️⃣ Registrar préstamo
+4️⃣ Registrar devolución
+5️⃣ Listar libros
+6️⃣ Listar préstamos
+7️⃣ Salir
 
-Registrar un libro (Título, Autor, Año).
+🧱 Estructura del código
+📂 biblioteca.py
+│
+├── class ConexionBD      → Maneja la conexión con MySQL
+├── class Libro           → Representa un libro en la biblioteca
+├── class Usuario         → Representa un usuario (nombre, tipo)
+├── class Prestamo        → Representa un préstamo de libro
+│
+├── registrar_libro()     → Inserta libros nuevos
+├── registrar_usuario()   → Inserta usuarios nuevos
+├── registrar_prestamo()  → Registra préstamos
+├── devolver_libro()      → Marca libros como devueltos
+├── listar_libros()       → Muestra todos los libros
+├── listar_prestamos()    → Muestra los préstamos
+└── menu()                → Controla el flujo principal del programa
+🧠 Mejores prácticas recomendadas
 
-Registrar un usuario (Nombre, Tipo).
+Manejar errores con try/except para mayor robustez.
 
-Registrar préstamo (proporcionar ID de usuario y ID de libro).
+Validar entradas del usuario.
 
-Devolver un libro (proporcionar ID del préstamo).
+Sustituir credenciales por variables de entorno (os.environ).
 
-Listar libros o préstamos para ver el estado.
+Agregar logs en vez de print() para auditoría.
 
-Estructura del código
+Añadir soporte CLI con argparse o click.
 
-ConexionBD — Clase encargada de la conexión y ejecución de consultas. Métodos principales:
+🧩 Ejemplo rápido de uso
+python biblioteca.py
 
-ejecutar(query, valores=None): ejecuta queries que modifican la BD.
+📖 Ingresa 1 → Agrega un libro.
 
-consultar(query, valores=None): ejecuta queries SELECT y retorna resultados.
+👤 Ingresa 2 → Agrega un usuario.
 
-cerrar(): cierra cursor y conexión.
+📦 Ingresa 3 → Crea un préstamo.
 
-Libro — Clase modelo para libros (título, autor, año, disponible).
+↩️ Ingresa 4 → Devuelve un libro.
 
-Usuario — Clase modelo para usuarios (nombre, tipo).
-
-Prestamo — Clase modelo para préstamos (id_usuario, id_libro, fecha_prestamo, fecha_devolucion).
-
-Funciones utilitarias:
-
-registrar_libro(conexion, libro)
-
-registrar_usuario(conexion, usuario)
-
-registrar_prestamo(conexion, prestamo)
-
-devolver_libro(conexion, id_prestamo)
-
-listar_libros(conexion)
-
-listar_prestamos(conexion)
-
-menu() — Interfaz de consola que orquesta la ejecución.
-
-Buenas prácticas y mejoras sugeridas
-
-Manejar mejor los errores y excepciones (por ejemplo envolver ejecutar y consultar en try/except).
-
-Validaciones de entrada (evitar conversiones que rompan el programa si el usuario ingresa texto donde se espera un número).
-
-Reemplazar credenciales hardcodeadas por variables de entorno (os.environ) o un archivo .env.
-
-Agregar logging en lugar de print para tener trazabilidad.
-
-Implementar un pequeño CLI con argparse o click para ejecutar operaciones directamente sin el menú interactivo.
-
-Añadir paginación/ordenamiento en listados si la base de datos crece.
-
-Ejemplo rápido
-
-Ejecutar el script.
-
-Seleccionar 1 para registrar un libro.
-
-Seleccionar 2 para registrar un usuario.
-
-Seleccionar 3 para registrar un préstamo con los IDs correspondientes.
+📋 Ingresa 5 o 6 → Lista los registros.
